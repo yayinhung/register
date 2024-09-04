@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>團隊報名表格</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold mb-6">團隊報名表格</h1>
+        <form>
+            <div class="mb-6">
+                <label class="block mb-2">團隊人數：
+                    <select name="teamSize" class="w-full border rounded p-2">
+                        <option value="4">4人</option>
+                        <option value="5">5人</option>
+                    </select>
+                </label>
+            </div>
+            
+            <div id="teamMembers">
+                <!-- 團隊成員表單將通過 JavaScript 動態生成 -->
+            </div>
+            
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">提交報名</button>
+        </form>
+    </div>
+
+    <script>
+        function createMemberForm(index) {
+            return `
+                <div class="mb-8 p-4 border rounded">
+                    <h2 class="text-xl font-semibold mb-4">團隊成員 ${index}</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-2">姓名：
+                                <input type="text" name="name${index}" required class="w-full border rounded p-2">
+                            </label>
+                        </div>
+                        <div>
+                            <label class="block mb-2">出生日期：
+                                <input type="date" name="birthdate${index}" required class="w-full border rounded p-2">
+                            </label>
+                        </div>
+                        <div>
+                            <label class="block mb-2">身分證字號：
+                                <input type="text" name="id${index}" required class="w-full border rounded p-2">
+                            </label>
+                        </div>
+                        <div>
+                            <label class="block mb-2">戶籍地：
+                                <input type="text" name="address${index}" required class="w-full border rounded p-2">
+                            </label>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-semibold mt-4 mb-2">攜眷資料</h3>
+                    ${createCompanionForm(index, 1)}
+                    ${createCompanionForm(index, 2)}
+                </div>
+            `;
+        }
+
+        function createCompanionForm(memberIndex, companionIndex) {
+            return `
+                <div class="mt-4 p-3 bg-gray-50 rounded">
+                    <h4 class="font-medium mb-2">攜眷 ${companionIndex}</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-2">姓名：
+                                <input type="text" name="companion${companionIndex}Name${memberIndex}" class="w-full border rounded p-2">
+                            </label>
+                        </div>
+                        <div>
+                            <label class="block mb-2">出生日期：
+                                <input type="date" name="companion${companionIndex}Birthdate${memberIndex}" class="w-full border rounded p-2">
+                            </label>
+                        </div>
+                        <div>
+                            <label class="block mb-2">身分證字號：
+                                <input type="text" name="companion${companionIndex}Id${memberIndex}" class="w-full border rounded p-2">
+                            </label>
+                        </div>
+                        <div>
+                            <label class="block mb-2">戶籍地：
+                                <input type="text" name="companion${companionIndex}Address${memberIndex}" class="w-full border rounded p-2">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateTeamMembers() {
+            const teamSize = document.querySelector('[name="teamSize"]').value;
+            const teamMembersDiv = document.getElementById('teamMembers');
+            teamMembersDiv.innerHTML = '';
+            for (let i = 1; i <= teamSize; i++) {
+                teamMembersDiv.innerHTML += createMemberForm(i);
+            }
+        }
+
+        document.querySelector('[name="teamSize"]').addEventListener('change', updateTeamMembers);
+        updateTeamMembers(); // 初始化表單
+    </script>
+</body>
+</html>
